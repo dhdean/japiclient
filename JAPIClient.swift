@@ -38,6 +38,7 @@ open class JAPIClient: HTClient {
      
      - returns: The data task representation of the request.
      */
+    @discardableResult
     open func dispatch(_ apiReq: JAPIReq, handler:@escaping JAPICallback) -> URLSessionDataTask {
         return super.dispatch(self.resolveHTReq(apiReq)) { (data: Data?, status: Int, error: NSError?) in
             // Look for transport/socket/timeout error
@@ -53,7 +54,7 @@ open class JAPIClient: HTClient {
             }
             do {
                 // Expect JSON object
-                var jsonDict:Dictionary<String,AnyObject>? = try data!.jsonDataAsDictionary()
+                let jsonDict:Dictionary<String,AnyObject>? = try data!.jsonDataAsDictionary()
                 handler(jsonDict, nil)
             } catch let jsonErr as NSError  {
                 handler(nil, NSError(domain:jsonErr.domain, code:jsonErr.code, userInfo:["response": data ?? Data()]))
