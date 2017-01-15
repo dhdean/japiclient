@@ -14,12 +14,16 @@ extension Data {
      - returns: Dictionary representation of the JSON object
      */
     public func jsonDataAsDictionary() throws -> Dictionary<String, AnyObject>? {
-        let jsonObject = try JSONSerialization.jsonObject(with: self, options: JSONSerialization.ReadingOptions.mutableContainers)
-        let jsonDict:Dictionary<String, AnyObject>? = jsonObject as? Dictionary
-        if (jsonDict == nil) {
-            throw NSError(domain: "", code: 99, userInfo: nil)
+        do {
+            let jsonObject = try JSONSerialization.jsonObject(with: self, options: JSONSerialization.ReadingOptions.mutableContainers)
+            let jsonDict:Dictionary<String, AnyObject>? = jsonObject as? Dictionary
+            if (jsonDict == nil) {
+                throw NSError(domain: "net.dhdean.jsondata", code: 99, userInfo: nil)
+            }
+            return jsonDict
+        } catch _ {
+            return nil
         }
-        return jsonDict
     }
 
 }
